@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LostNFound — Settings</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="NavBarProfile.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+
+    <style>
+        body {
+            background-color: var(--navy) !important;
+            margin: 0;
+            /* Padding top diuruskan oleh NavBarProfile.css (65px), ditambah sedikit ruang premium */
+            padding-top: 95px !important; 
+            font-family: var(--font-body);
+        }
+
+        /* Struktur Kandungan Utama Halaman Settings */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .page-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 35px;
+        }
+
+        .page-header h1 {
+            color: var(--white);
+            margin: 0 0 6px 0;
+            font-size: 1.85rem;
+            font-weight: 600;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Grid Susun Atur Kad */
+        .settings-layout-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .settings-layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .settings-card {
+            background-color: var(--navy2);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 12px;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .settings-card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.25rem;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .settings-card h2 span {
+            color: var(--teal);
+        }
+
+        .input-row-flex {
+            display: flex;
+            gap: 15px;
+        }
+
+        .field-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex: 1;
+            position: relative;
+        }
+
+        .field-container label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .field-container input {
+            background-color: var(--navy);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .field-container input:focus {
+            border-color: var(--teal);
+        }
+
+        .field-container input:disabled {
+            background-color: rgba(255, 255, 255, 0.02);
+            color: #64748b;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        /* Ikon Mata Sorok/Papar */
+        .password-eye-icon {
+            position: absolute;
+            right: 14px;
+            top: 38px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 20px;
+            user-select: none;
+        }
+
+        .password-eye-icon:hover {
+            color: var(--white);
+        }
+
+        /* Komponen Pengukur Tahap Keselamatan Password */
+        .strength-meter-box {
+            margin-top: 6px;
+        }
+
+        .strength-meter-bg {
+            background-color: rgba(255, 255, 255, 0.05);
+            height: 5px;
+            border-radius: 3px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .strength-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-meter-text {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: block;
+            font-weight: 500;
+        }
+
+        /* Butang Simpan */
+        .btn-submit-settings {
+            background-color: var(--teal);
+            color: var(--navy);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-submit-settings:hover {
+            opacity: 0.9;
+        }
+
+        .btn-submit-settings:active {
+            transform: scale(0.98);
+        }
+
+        /* Override penyelarasan ikon material di dalam dropdown */
+        .nav-profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ── MODAL UTK PENGESAHAN LOG KELUAR & NOTIFIKASI PROFESIONAL ── */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.85); /* Berdasarkan var(--navy) */
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .popup-card {
+            background-color: var(--navy2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .popup-card {
+            transform: scale(1);
+        }
+
+        .popup-icon-wrap {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+        }
+
+        /* Ditukar kepada warna Teal lembut untuk rupa yang lebih premium & tenang */
+        .popup-icon-wrap.confirm {
+            background-color: rgba(20, 184, 166, 0.1);
+            border: 1px solid var(--teal);
+            color: var(--teal);
+        }
+
+        .popup-icon-wrap.success {
+            background-color: rgba(20, 184, 166, 0.1);
+            border: 1px solid var(--teal);
+            color: var(--teal);
+        }
+
+        .popup-icon-wrap.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .popup-icon-wrap span {
+            font-size: 32px !important;
+        }
+
+        .popup-title {
+            color: var(--white);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+        }
+
+        .popup-desc {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            margin: 0 0 24px 0;
+        }
+
+        .popup-btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 11px 22px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .popup-btn.btn-primary {
+            background-color: var(--teal);
+            color: var(--navy);
+        }
+
+        .popup-btn.btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .popup-btn.btn-danger {
+            background-color: #ef4444;
+            color: var(--white);
+        }
+
+        .popup-btn.btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .popup-btn.btn-secondary {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--white);
+        }
+
+        .popup-btn.btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-left" style="text-decoration: none;">
+            <div class="nav-logo-box">
+                <div class="icon check-icon"></div>
+                <div class="icon search-icon"></div>
+            </div>
+            <div class="nav-brand">Lost<span>N</span>Found</div>
+        </a>
+        
+        <div class="nav-links">
+            <a href="index.html#how-it-works">How it works</a>
+            <a href="browse.html">Browse</a>
+            <a href="report.html">Report</a>
+            <a href="about.html">About</a>
+        </div>
+
+        <div id="nav-auth-section">
+            <a href="login.html" class="btn-login" id="nav-login-btn">Login</a>
+
+            <div class="nav-profile-container" id="nav-profile-box" style="display: none;">
+                <div class="nav-profile-trigger" onclick="toggleProfileMenu()">
+                    <div class="nav-avatar">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </div>
+                    <span class="nav-username">Ahmad Albab</span>
+                    <span class="material-symbols-outlined arrow-icon">keyboard_arrow_down</span>
+                </div>
+                
+                <div class="nav-profile-dropdown" id="profileDropdown">
+                    <a href="admin.html"><span class="material-symbols-outlined">dashboard</span> Admin</a>
+                    <a href="settings.html" style="color: #14B8A6; font-weight: 600;"><span class="material-symbols-outlined">settings</span> Settings</a>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 5px 0;">
+                    <a href="#" onclick="logoutUser(event)" class="logout-link"><span class="material-symbols-outlined">logout</span> Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <header class="page-header">
+            <h1>Account Settings ⚙️</h1>
+            <p style="margin-top: 5px;">Manage your profile details, secure credentials and update authentication email settings.</p>
+        </header>
+
+        <div class="settings-layout-grid">
+            
+            <section class="settings-card">
+                <h2><span class="material-symbols-outlined">manage_accounts</span> Profile Information</h2>
+                <form id="profileForm" onsubmit="saveProfileData(event)">
+                    <div class="input-row-flex">
+                        <div class="field-container">
+                            <label for="firstNameInput">First Name</label>
+                            <input type="text" id="firstNameInput" required placeholder="Ahmad">
+                        </div>
+                        <div class="field-container">
+                            <label for="lastNameInput">Last Name</label>
+                            <input type="text" id="lastNameInput" required placeholder="Albab">
+                        </div>
+                    </div>
+
+                    <div class="field-container">
+                        <label for="matrixInput">Matrix Number</label>
+                        <input type="text" id="matrixInput" disabled placeholder="CI220034">
+                    </div>
+
+                    <div class="field-container">
+                        <label for="emailInput">Student Email Address</label>
+                        <input type="email" id="emailInput" required placeholder="username@student.uthm.edu.my">
+                    </div>
+
+                    <button type="submit" class="btn-submit-settings">Save Changes</button>
+                </form>
+            </section>
+
+            <section class="settings-card">
+                <h2><span class="material-symbols-outlined">security</span> Change Password</h2>
+                <form id="securityForm" onsubmit="savePasswordData(event)">
+                    
+                    <div class="field-container">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" oninput="livePasswordStrengthCheck()" required placeholder="••••••••">
+                        <span class="material-symbols-outlined password-eye-icon" onclick="togglePasswordInput('newPassword', this)">visibility</span>
+                        
+                        <div class="strength-meter-box">
+                            <div class="strength-meter-bg">
+                                <div class="strength-meter-fill" id="barFill"></div>
+                            </div>
+                            <span class="strength-meter-text" id="barText" style="color: var(--muted);">Enter a new password</span>
+                        </div>
+                    </div>
+
+                    <div class="field-container" style="margin-top: 15px;">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required placeholder="••••••••">
+                        <span class="material-symbols-outlined password-eye-icon" onclick="togglePasswordInput('confirmPassword', this)">visibility</span>
+                    </div>
+
+                    <button type="submit" class="btn-submit-settings">Update Password</button>
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="premium-popup-overlay" class="modal-overlay">
+        <div class="popup-card">
+            <div id="popup-icon-box" class="popup-icon-wrap confirm">
+                <span id="popup-icon-span" class="material-symbols-outlined">logout</span>
+            </div>
+            <h3 id="popup-title-text" class="popup-title">Confirmation</h3>
+            <p id="popup-desc-text" class="popup-desc">Are you sure you want to proceed with this action?</p>
+            <div id="popup-buttons-wrap" class="popup-btn-group">
+                </div>
+        </div>
+    </div>
+
+<script>
+    // SEMAK LOG IN APABILA HALAMAN DIMUATKAN
+    document.addEventListener("DOMContentLoaded", () => {
+        checkLoginStatus();
+        bindUserAccountData();
+    });
+
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        const loginBtn = document.getElementById("nav-login-btn");
+        const profileBox = document.getElementById("nav-profile-box");
+
+        if (isLoggedIn === "true") {
+            if (loginBtn) loginBtn.style.display = "none";
+            if (profileBox) profileBox.style.display = "block";
+            
+            const storedName = localStorage.getItem("userName");
+            if (storedName) {
+                document.querySelector(".nav-username").textContent = storedName;
+            }
+        } else {
+            showCustomModal("Access Denied", "Please log in to your account first!", "error", [
+                {
+                    text: "Log In",
+                    type: "primary",
+                    action: () => { window.location.href = "login.html"; }
+                }
+            ]);
+        }
+    }
+
+    // FUNGSI JAVASCRIPT UNTUK DROPDOWN PROFIL
+    function toggleProfileMenu() {
+        const dropdown = document.getElementById("profileDropdown");
+        dropdown.classList.toggle("show");
+        
+        const arrow = document.querySelector(".arrow-icon");
+        if(dropdown.classList.contains("show")) {
+            arrow.style.transform = "rotate(180deg)";
+        } else {
+            arrow.style.transform = "rotate(0deg)";
+        }
+    }
+
+    window.addEventListener("click", (e) => {
+        const profileBox = document.getElementById("nav-profile-box");
+        if (profileBox && !profileBox.contains(e.target)) {
+            const dropdown = document.getElementById("profileDropdown");
+            if (dropdown && dropdown.classList.contains("show")) {
+                dropdown.classList.remove("show");
+                document.querySelector(".arrow-icon").style.transform = "rotate(0deg)";
+            }
+        }
+    });
+
+    // SISTEM MODAL PREMIUM ENGINE (MENGGANTIKAN ALERT DAN CONFIRM)
+    function showCustomModal(title, description, type, buttons = []) {
+        const overlay = document.getElementById("premium-popup-overlay");
+        const iconBox = document.getElementById("popup-icon-box");
+        const iconSpan = document.getElementById("popup-icon-span");
+        const titleEl = document.getElementById("popup-title-text");
+        const descEl = document.getElementById("popup-desc-text");
+        const btnContainer = document.getElementById("popup-buttons-wrap");
+
+        titleEl.textContent = title;
+        descEl.textContent = description;
+
+        // Menyusun kelas hiasan warna bulatan luar ikon
+        iconBox.className = "popup-icon-wrap " + type;
+        
+        // Memilih ikon material yang sepadan
+        if (type === "success") iconSpan.textContent = "check_circle";
+        else if (type === "error") iconSpan.textContent = "error";
+        else iconSpan.textContent = "logout"; 
+
+        btnContainer.innerHTML = "";
+        buttons.forEach(btnConfig => {
+            const btn = document.createElement("button");
+            btn.textContent = btnConfig.text;
+            
+            if (btnConfig.type === "primary") btn.className = "popup-btn btn-primary";
+            else if (btnConfig.type === "danger") btn.className = "popup-btn btn-danger";
+            else btn.className = "popup-btn btn-secondary";
+
+            btn.onclick = () => {
+                closeCustomModal();
+                if (btnConfig.action && typeof btnConfig.action === "function") {
+                    btnConfig.action();
+                }
+            };
+            btnContainer.appendChild(btn);
+        });
+
+        overlay.classList.add("active");
+    }
+
+    function closeCustomModal() {
+        document.getElementById("premium-popup-overlay").classList.remove("active");
+    }
+
+    function logoutUser(event) {
+        event.preventDefault();
+        
+        showCustomModal(
+            "Log Out Account", 
+            "Are you sure you want to sign out of the LostNFound system?", 
+            "confirm", 
+            [
+                {
+                    text: "Cancel",
+                    type: "secondary",
+                    action: null
+                },
+                {
+                    text: "Yes, Log Out",
+                    type: "danger",
+                    action: () => {
+                        localStorage.removeItem("isLoggedIn");
+                        sessionStorage.removeItem("isAdminAuthenticated");
+                        localStorage.removeItem("userName");
+                        window.location.href = "index.html";
+                    }
+                }
+            ]
+        );
+    }
+
+    function bindUserAccountData() {
+        const savedUser = JSON.parse(localStorage.getItem("lostnfoundUser"));
+        if (savedUser) {
+            document.getElementById("firstNameInput").value = savedUser.firstName || "";
+            document.getElementById("lastNameInput").value = savedUser.lastName || "";
+            document.getElementById("matrixInput").value = savedUser.matrix || "";
+            document.getElementById("emailInput").value = savedUser.email || "";
+        }
+    }
+
+    // KEMAS KINI DATA PROFIL
+    function saveProfileData(event) {
+        event.preventDefault();
+        const fName = document.getElementById("firstNameInput").value.trim();
+        const lName = document.getElementById("lastNameInput").value.trim();
+        const emailVal = document.getElementById("emailInput").value.trim();
+
+        let savedUser = JSON.parse(localStorage.getItem("lostnfoundUser")) || {};
+        savedUser.firstName = fName;
+        savedUser.lastName = lName;
+        savedUser.email = emailVal;
+        
+        localStorage.setItem("lostnfoundUser", JSON.stringify(savedUser));
+        localStorage.setItem("userName", fName + " " + lName);
+
+        showCustomModal("Kemaskini Berjaya", "Profil akaun anda telah berjaya disimpan!", "success", [
+            {
+                text: "Selesai",
+                type: "primary",
+                action: () => { window.location.reload(); }
+            }
+        ]);
+    }
+
+    // KEMAS KINI KATA LALUAN
+    function savePasswordData(event) {
+        event.preventDefault();
+        const newPass = document.getElementById("newPassword").value;
+        const confirmPass = document.getElementById("confirmPassword").value;
+
+        if (newPass !== confirmPass) {
+            showCustomModal("Ralat Padanan", "Sila pastikan input sah. Pengesahan kata laluan baru tidak sepadan!", "error", [
+                { text: "Cuba Semula", type: "secondary", action: null }
+            ]);
+            return;
+        }
+
+        let savedUser = JSON.parse(localStorage.getItem("lostnfoundUser")) || {};
+        savedUser.password = newPass;
+        localStorage.setItem("lostnfoundUser", JSON.stringify(savedUser));
+
+        showCustomModal("Kata Laluan Dikemas Kini", "Keselamatan akaun anda dipertingkatkan. Kata laluan baharu berjaya disimpan!", "success", [
+            {
+                text: "OK",
+                type: "primary",
+                action: () => {
+                    document.getElementById("securityForm").reset();
+                    livePasswordStrengthCheck();
+                }
+            }
+        ]);
+    }
+
+    // LIVE PASSWORD STRENGTH CHECKER
+    function livePasswordStrengthCheck() {
+        const pass = document.getElementById("newPassword").value;
+        const bar = document.getElementById("barFill");
+        const text = document.getElementById("barText");
+
+        if (!pass) {
+            bar.style.width = "0%";
+            text.textContent = "Enter a new password";
+            text.style.color = "var(--muted)";
+            return;
+        }
+
+        let score = 0;
+        if (pass.length >= 6) score++;
+        if (pass.length >= 10) score++;
+        if (/[A-Z]/.test(pass)) score++;
+        if (/[0-9]/.test(pass)) score++;
+
+        if (score <= 1) {
+            bar.style.width = "30%";
+            bar.style.backgroundColor = "#ef4444";
+            text.textContent = "Weak password";
+            text.style.color = "#ef4444";
+        } else if (score <= 3) {
+            bar.style.width = "65%";
+            bar.style.backgroundColor = "#f59e0b";
+            text.textContent = "Medium password";
+            text.style.color = "#f59e0b";
+        } else {
+            bar.style.width = "100%";
+            bar.style.backgroundColor = "var(--teal)";
+            text.textContent = "Strong password!";
+            text.style.color = "var(--teal)";
+        }
+    }
+
+    // PAPAR / SOROK INPUT KATA LALUAN
+    function togglePasswordInput(id, icon) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.textContent = "visibility_off";
+        } else {
+            input.type = "password";
+            icon.textContent = "visibility";
+        }
+    }
+</script>
+</body>
+</html>

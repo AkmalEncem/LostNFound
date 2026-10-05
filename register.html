@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LostNFound — Register</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <style>
+        /* Popup overlay */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        /* Password strength bar */
+        .password-strength {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .password-strength div {
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+        #strengthText, #strengthText1 {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            min-height: 18px;
+        }
+    </style>
+</head>
+<body class="login-body">
+
+    <a href="index.html" class="btn-back-home">
+        <span class="material-symbols-outlined" style="font-size: 16px;">arrow_back</span> Back to home
+    </a>
+
+    <div class="login-wrapper register-wrapper">
+        <div class="login-header-inline">
+            <div class="nav-logo-box">
+                <div class="icon check-icon"></div>
+                <div class="icon search-icon"></div>
+            </div>
+            <div class="login-brand">Lost<span>N</span>Found</div>
+        </div>
+        
+        <p class="login-subtitle">Create your UTHM account</p>
+
+        <form onsubmit="registerSuccess(event)" autocomplete="off">
+            <div class="register-grid">
+                <div class="login-form-group">
+                    <label>First Name: </label>
+                    <input type="text" id="regFirstName" class="login-input" placeholder="Ahmad" autocomplete="given-name" required>
+                </div>
+                <div class="login-form-group">
+                    <label>Last Name: </label>
+                    <input type="text" id="regLastName" class="login-input" placeholder="Albab" autocomplete="family-name" required>
+                </div>
+
+                <div class="login-form-group full-width">
+                    <label>Matrix Number: </label>
+                    <input type="text" id="regMatrix" class="login-input" placeholder="e.g. CI250000" autocomplete="off" required>
+                </div>
+
+                <div class="login-form-group full-width">
+                    <label>Email Address: </label>
+                    <input type="email" id="regEmail" class="login-input" placeholder="no.matrix@student.uthm.edu.my" autocomplete="email" required>
+                </div>
+                
+                <div class="login-form-group">
+                    <label>Password: </label>
+                    <div class="password-container">
+                        <input type="password" id="p1" class="login-input" placeholder="••••••••" autocomplete="new-password" required>
+                        <span class="material-symbols-outlined toggle-password" onclick="togglePassword('p1')">visibility</span>
+                    </div>
+                    <div class="password-strength">
+                        <div id="strengthBar"></div>
+                    </div>
+                    <p id="strengthText"></p>
+                </div>
+                <div class="login-form-group">
+                    <label>Confirm Password: </label>
+                    <div class="password-container">
+                        <input type="password" id="p2" class="login-input" placeholder="••••••••" autocomplete="new-password" required>
+                        <span class="material-symbols-outlined toggle-password" onclick="togglePassword('p2')">visibility</span>
+                    </div>
+                    <div class="password-strength">
+                        <div id="strengthBar1"></div>
+                    </div>
+                    <p id="strengthText1"></p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit-login">Sign Up</button>
+        </form>
+
+        <div class="separator"><span>OR</span></div>
+
+        <div class="login-footer-text" style="font-size: 0.8rem; margin-top: 20px;">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <!-- Success Popup — di luar .login-wrapper -->
+    <div id="successPopup" class="popup-overlay">
+        <div class="popup-box">
+            <span class="material-symbols-outlined popup-icon">check_circle</span>
+            <h2>Registration Successful</h2>
+            <p>Your account has been created successfully.</p>
+            <button onclick="goToLogin()">Continue</button>
+        </div>
+    </div>
+
+    <script>
+    function togglePassword(id) {
+        const field = document.getElementById(id);
+        const icon = field.nextElementSibling;
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.textContent = 'visibility_off';
+        } else {
+            field.type = 'password';
+            icon.textContent = 'visibility';
+        }
+    }
+
+    function updateStrength(inputElement, barElement, textElement) {
+        const value = inputElement.value;
+        let strength = 0;
+
+        if (value.length === 0) {
+            barElement.style.width = "0%";
+            textElement.textContent = "";
+            return;
+        }
+
+        if (value.length >= 6) strength++;
+        if (/[A-Z]/.test(value)) strength++;
+        if (/[0-9]/.test(value)) strength++;
+        if (/[@$!%*?&]/.test(value)) strength++;
+
+        switch (strength) {
+            case 1:
+                barElement.style.width = "25%";
+                barElement.style.background = "#ef4444";
+                textElement.textContent = "Weak Password";
+                textElement.style.color = "#ef4444";
+                break;
+            case 2:
+                barElement.style.width = "50%";
+                barElement.style.background = "#f59e0b";
+                textElement.textContent = "Medium Password";
+                textElement.style.color = "#f59e0b";
+                break;
+            case 3:
+                barElement.style.width = "75%";
+                barElement.style.background = "#3b82f6";
+                textElement.textContent = "Strong Password";
+                textElement.style.color = "#3b82f6";
+                break;
+            case 4:
+                barElement.style.width = "100%";
+                barElement.style.background = "#22c55e";
+                textElement.textContent = "Very Strong Password";
+                textElement.style.color = "#22c55e";
+                break;
+            default:
+                barElement.style.width = "10%";
+                barElement.style.background = "#ef4444";
+                textElement.textContent = "Too Short";
+                textElement.style.color = "#ef4444";
+        }
+    }
+
+    const p1 = document.getElementById("p1");
+    const p2 = document.getElementById("p2");
+
+    p1.addEventListener("input", () => updateStrength(p1, document.getElementById("strengthBar"), document.getElementById("strengthText")));
+    p2.addEventListener("input", () => updateStrength(p2, document.getElementById("strengthBar1"), document.getElementById("strengthText1")));
+
+    function registerSuccess(event) {
+        event.preventDefault();
+
+        if (p1.value !== p2.value) {
+            alert("❌ Passwords do not match! Please try again.");
+            p2.focus();
+            return;
+        }
+
+        const firstName = document.getElementById("regFirstName").value;
+        const lastName  = document.getElementById("regLastName").value;
+        const matrix    = document.getElementById("regMatrix").value;
+        const email     = document.getElementById("regEmail").value;
+        const password  = p1.value;
+
+        // Support multiple accounts — simpan dalam array
+        let allUsers = JSON.parse(localStorage.getItem("lostnfoundUsers")) || [];
+
+        const emailExists = allUsers.some(u => u.email === email);
+        if (emailExists) {
+            alert("❌ Email ini sudah didaftarkan. Sila guna email lain.");
+            return;
+        }
+
+        const newUser = { firstName, lastName, matrix, email, password };
+        allUsers.push(newUser);
+        localStorage.setItem("lostnfoundUsers", JSON.stringify(allUsers));
+
+        // Kekalkan key lama supaya kod lain tak rosak (simpan user terbaru)
+        localStorage.setItem("lostnfoundUser", JSON.stringify(newUser));
+        localStorage.removeItem("isLoggedIn");
+
+        document.getElementById("successPopup").classList.add("active");
+    }
+
+    function goToLogin() {
+        window.location.href = "login.html";
+    }
+    </script>
+</body>
+</html>

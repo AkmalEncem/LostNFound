@@ -1,0 +1,124 @@
+/* ── NAV PROFILE DROPDOWN ── */
+
+/* Container utama yang wrap trigger + dropdown */
+.nav-profile-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Bahagian yang boleh diklik (avatar + nama + anak panah) */
+.nav-profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.nav-profile-trigger:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Ikon avatar bulat */
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #14B8A6;
+    color: #0F172A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nav-avatar .material-symbols-outlined {
+    font-size: 20px;
+}
+
+/* Nama user */
+.nav-username {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+/* Ikon anak panah */
+.arrow-icon {
+    font-size: 18px !important;
+    color: #94A3B8;
+    transition: transform 0.3s ease;
+}
+
+/* Dropdown menu — hidden by default */
+.nav-profile-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 200px;
+    background: #1E293B;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    z-index: 2000;
+    animation: dropdownFade 0.2s ease;
+}
+
+/* Show bila ada class .show */
+.nav-profile-dropdown.show {
+    display: block;
+}
+
+@keyframes dropdownFade {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Link dalam dropdown */
+.nav-profile-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    font-size: 0.88rem;
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.nav-profile-dropdown a:hover {
+    background: rgba(20, 184, 166, 0.1);
+    color: #14B8A6;
+}
+
+.nav-profile-dropdown a .material-symbols-outlined {
+    font-size: 18px;
+    color: #94A3B8;
+}
+
+.nav-profile-dropdown hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin: 0;
+}
+
+/* Log keluar — warna merah */
+.nav-profile-dropdown .logout-link {
+    color: #f87171;
+}
+
+.nav-profile-dropdown .logout-link:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+}
+
+.nav-profile-dropdown .logout-link .material-symbols-outlined {
+    color: #f87171;
+}

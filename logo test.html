@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logo Merge Perfect</title>
+
+<style>
+body {
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.logo-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+}
+
+/* BASE */
+.icon {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.6s ease;
+}
+
+/* ===== POSISI AWAL (MATCH GAMBAR) ===== */
+
+/* KANTA (depan, kanan sikit) */
+.check-icon {
+    width: 70%;
+    height: 70%;
+    background-image: url('hgff2.png');
+    left: 35%;
+    top: 18%;
+    z-index: 1;
+}
+
+/* PUZZLE (belakang, kiri sikit) */
+.search-icon {
+    width: 60%;
+    height: 60%;
+    background-image: url('fbihkabjoig2.png');
+    left: 10%;
+    top: 31.5%;
+    z-index: 2;
+}
+
+/* ===== HOVER (MERGE KE TENGAH) ===== */
+.logo-container:hover .check-icon {
+    transform: translateX(-10px) translateY(-10px) scale(1.5);
+}
+
+.logo-container:hover .search-icon {
+    transform: translateX(1px) translateY(-5px) scale(1.4);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="logo-container">
+    <div class="icon check-icon"></div>
+    <div class="icon search-icon"></div>
+</div>
+
+</body>
+</html>
